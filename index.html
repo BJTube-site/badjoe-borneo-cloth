@@ -2,274 +2,373 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Badjoe Borneo Cloth</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Anton', sans-serif;
-      background: #0e0e0e;
+      font-family: Arial, sans-serif;
+      background: url('https://png.pngtree.com/background/20230317/original/pngtree-forest-tree-silhouette-background-picture-image_2149295.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: #fff;
     }
 
+    /* Overlay gelap */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(3px);
+      z-index: -1;
+    }
+
+    #popup-overlay {
+      position: fixed;
+      z-index: 9999;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #popup-overlay button {
+      padding: 20px 40px;
+      font-size: 24px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    #main-content {
+      display: none;
+    }
+
+    header, main, footer {
+      padding: 1rem;
+    }
+
     header {
-      background-color: #1a1a1a;
+      background: rgba(0,0,0,0.6);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
       flex-wrap: wrap;
     }
 
-    .logo img {
-      height: 50px;
-      margin-right: 10px;
-    }
-
-    .logo h1 {
-      font-size: 24px;
-      color: #ff3b3b;
-      display: inline-block;
-    }
+    .logo img { height: 50px; margin-right: 10px; }
 
     nav ul {
       list-style: none;
       display: flex;
-      gap: 20px;
+      gap: 1rem;
       flex-wrap: wrap;
     }
 
-    nav ul li {
-      position: relative;
-    }
-
     nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      padding: 10px;
-    }
-
-    .dropdown:hover .dropdown-menu {
-      display: block;
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      background-color: #1a1a1a;
-      top: 40px;
-      left: 0;
-      padding: 10px 0;
-      min-width: 150px;
-      border: 1px solid #ff3b3b;
-      border-radius: 5px;
-      z-index: 1000;
-    }
-
-    .dropdown-menu li {
-      display: block;
-    }
-
-    .dropdown-menu li a {
-      display: block;
-      padding: 10px 15px;
-      color: #fff;
-    }
-
-    .dropdown-menu li a:hover {
-      background-color: #ff3b3b;
-      color: #fff;
-    }
-
-    .hero {
-      background: url('https://png.pngtree.com/background/20230317/original/pngtree-forest-tree-silhouette-background-picture-image_2149295.jpg') center/cover no-repeat;
-      height: 400px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .hero h2 {
-      font-size: 40px;
-      background-color: rgba(0,0,0,0.5);
-      padding: 10px 20px;
-      border-radius: 10px;
-    }
-
-    .cta {
-      margin-top: 20px;
-      background: #ff3b3b;
       color: white;
-      padding: 10px 20px;
       text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
       border-radius: 5px;
     }
 
-    .product-grid {
+    nav ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .product-list {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      padding: 30px;
-      background: #111;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
 
     .product {
-      background: #222;
-      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem;
       border-radius: 10px;
       text-align: center;
     }
 
     .product img {
-      width: 100%;
+      max-width: 100%;
       border-radius: 8px;
     }
 
-    .product h3, .product h2 {
-      margin-top: 10px;
+    footer {
+      background-color: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
     }
 
-    .product .btn, .product a {
-      display: inline-block;
-      margin-top: 10px;
-      background: #ff3b3b;
+    .wa-chat-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background-color: #25D366;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 999;
+      font-size: 16px;
+    }
+
+    .wa-popup {
+      position: fixed;
+      bottom: 90px;
+      right: 25px;
+      width: 280px;
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .wa-header {
+      background-color: #25D366;
       color: white;
       padding: 10px;
-      border-radius: 5px;
-      text-decoration: none;
-    }
-
-    footer {
-      background: #1a1a1a;
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-    }
-
-    footer .socials a {
-      color: #ff3b3b;
-      margin: 0 5px;
-      text-decoration: none;
-    }
-
-    .popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(10, 10, 10, 0.95);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .popup-box {
-      background: #1a1a1a;
-      border: 2px solid #ff3b3b;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      max-width: 400px;
-    }
-
-    .popup-box h2 {
-      color: #ff3b3b;
-      margin-bottom: 10px;
-    }
-
-    .popup-box p {
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-
-    .popup-buttons {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
       display: flex;
-      gap: 10px;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .popup-buttons .btn {
-      padding: 10px 20px;
-      background: #ff3b3b;
+    .wa-body {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .wa-body a {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #25D366;
       color: white;
-      border: none;
-      border-radius: 5px;
       text-decoration: none;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: white;
       cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .popup-buttons .btn.follow:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav ul {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-      }
-
-      .hero h2 {
-        font-size: 28px;
-        padding: 8px 16px;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 20px;
-      }
-
-      .product {
-        padding: 15px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .logo h1 {
-        font-size: 20px;
-      }
-
-      .hero {
-        height: 300px;
-      }
-
-      .hero h2 {
-        font-size: 20px;
-        padding: 6px 12px;
-      }
-
-      .product-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .cta, .product .btn, .popup-buttons .btn {
-        padding: 8px 16px;
-        font-size: 14px;
-      }
-
-      .popup-box {
-        padding: 20px;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Badjoe Borneo Cloth HTML Structure di sini -->
+
+<!-- Popup Musik -->
+<div id="popup-overlay">
+  <button onclick="startSite()">🎧 Play Musik & Masuk</button>
+</div>
+
+<!-- AUDIO -->
+<audio id="bg-music" loop>
+  <source src="audio.mp3/Nawei-sape.mp3" type="audio/mpeg">
+  Browser tidak mendukung audio.
+</audio>
+
+<!-- KONTEN UTAMA -->
+<div id="main-content">
+
+  <header>
+    <div class="logo">
+      <img src="https://tse1.mm.bing.net/th?id=OIP.BcwbNUCOHozDPvvIhJM9vAHaHa&pid=Api&P=0&h=220" alt="Logo">
+      <h1>Badjoe Borneo Cloth</h1>
+    </div>
+    <nav>
+  <ul>
+    <li><a href="#">Tentang Kami</a></li>
+    <li><a href="#tshirt">T-Shirt</a></li>
+    <li><a href="#tshirt-lengan-panjang">T-Shirt Lengan Panjang</a></li>
+    <li><a href="#clutch-bag">Clutch Bag</a></li>
+    <li><a href="https://shopee.co.id/badjoe_borneo_cloth" target="_blank">Shopee</a></li>
+    <li><a href="https://vt.tiktok.com/ZSkwP7sYy/" target="_blank">TikTok</a></li>
+    <li><a href="https://www.instagram.com/badjoe_borneo_official/" target="_blank">Instagram</a></li>
+  </ul>
+</nav>
+  </header>
+
+  <main>
+  <!-- SECTION TSHIRT -->
+  <section id="tshirt">
+    <h2 class="section-title">T-Shirt</h2>
+    <div class="product-grid">
+
+      <!-- Produk 1 -->
+      <div class="product-grid"> <!-- BENAR -->
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-073">
+        <h2>BJ-073</h2>
+        <p>Rp115.000 - Rp150.000</p>
+        <a href="https://shopee.co.id/Kaos-Dayak-Badjoe-Borneo-BJ-073-Hitam-i.949730126.43302294501" target="_blank">Beli di Shopee</a>
+      </div>
+
+      <!-- Produk 2 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-074">
+        <h2>BJ-074</h2>
+        <p>Rp115.000 - Rp150.000</p>
+        <a href="https://shopee.co.id/Kaos-Dayak-Badjoe-Borneo-BJ-073-Hitam-i.949730126.43302294501" target="_blank">Beli di Shopee</a>
+      </div>
+
+      <!-- Produk 3 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-073">
+        <h2>BJ-073</h2>
+        <p>Rp115.000 - Rp150.000</p>
+        <a href="https://shopee.co.id/Kaos-Dayak-Badjoe-Borneo-BJ-073-Hitam-i.949730126.43302294501" target="_blank">Beli di Shopee</a>
+      </div>
+
+      <!-- Produk 4 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-074">
+        <h2>BJ-074</h2>
+        <p>Rp115.000 - Rp150.000</p>
+        <a href="https://shopee.co.id/Kaos-Dayak-Badjoe-Borneo-BJ-073-Hitam-i.949730126.43302294501" target="_blank">Beli di Shopee</a>
+      </div>
+      </div>
+  </section>
+
+      <!-- SECTION TSHIRT LENGAN PANJANG -->
+<section id="tshirt-lengan-panjang">
+  <h2 class="section-title">T-Shirt Lengan Panjang</h2>
+  <div class="product-grid">
+
+    <!-- Produk 1 -->
+    <div class="product">
+      <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-LP-001">
+      <h2>BJ-LP-001</h2>
+      <p>Rp125.000 - Rp160.000</p>
+      <a href="https://shopee.co.id" target="_blank">Beli di Shopee</a>
+    </div>
+    
+    <!-- Produk 2 -->
+    <div class="product">
+      <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-LP-001">
+      <h2>BJ-LP-001</h2>
+      <p>Rp125.000 - Rp160.000</p>
+      <a href="https://shopee.co.id" target="_blank">Beli di Shopee</a>
+    </div>
+
+    <!-- Produk 3 -->
+    <div class="product">
+      <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-LP-001">
+      <h2>BJ-LP-001</h2>
+      <p>Rp125.000 - Rp160.000</p>
+      <a href="https://shopee.co.id" target="_blank">Beli di Shopee</a>
+    </div>
+    
+    <!-- Produk 4 -->
+    <div class="product">
+      <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="BJ-LP-001">
+      <h2>BJ-LP-001</h2>
+      <p>Rp125.000 - Rp160.000</p>
+      <a href="https://shopee.co.id" target="_blank">Beli di Shopee</a>
+    </div>
+    
+    </div>
+  </section>
+
+      <!-- Tambah produk lainnya di sini -->
+
+  <!-- SECTION CLUTCH BAG -->
+  <section id="clutch-bag">
+    <h2 class="section-title">Clutch Bag</h2>
+    <div class="product-grid">
+
+      <!-- Produk Clutch 1 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="CB-001">
+        <h2>CB-001</h2>
+        <p>Rp95.000 - Rp125.000</p>
+        <a href="https://shopee.co.id/Clutch-Dayak-Badjoe-Borneo-CB-001-i.949730126.12345678901" target="_blank">Beli di Shopee</a>
+      </div>
+      
+      <!-- Produk Clutch 2 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="CB-002">
+        <h2>CB-002</h2>
+        <p>Rp95.000 - Rp125.000</p>
+        <a href="https://shopee.co.id/Clutch-Dayak-Badjoe-Borneo-CB-001-i.949730126.12345678901" target="_blank">Beli di Shopee</a>
+      </div>
+
+      <!-- Produk Clutch 3 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="CB-001">
+        <h2>CB-001</h2>
+        <p>Rp95.000 - Rp125.000</p>
+        <a href="https://shopee.co.id/Clutch-Dayak-Badjoe-Borneo-CB-001-i.949730126.12345678901" target="_blank">Beli di Shopee</a>
+      </div>
+      
+      <!-- Produk Clutch 4 -->
+      <div class="product">
+        <img src="https://down-id.img.susercontent.com/file/id-11134207-7rbk2-ma9ndb4syyu26d.webp" alt="CB-002">
+        <h2>CB-002</h2>
+        <p>Rp95.000 - Rp125.000</p>
+        <a href="https://shopee.co.id/Clutch-Dayak-Badjoe-Borneo-CB-001-i.949730126.12345678901" target="_blank">Beli di Shopee</a>
+      </div>
+
+       <!-- Tambah produk lainnya di sini -->
+      
+    </div>
+  </section>
+</main>
+
+  <footer>
+    &copy; MMXXIII Badjoe Borneo Cloth. All rights reserved @balapama.
+  </footer>
+
+  <!-- WhatsApp -->
+  <div id="whatsappPopup" class="wa-popup">
+    <div class="wa-header">
+      <span>Butuh Bantuan?</span>
+      <button onclick="closeWAPopup()" class="close-btn">&times;</button>
+    </div>
+    <div class="wa-body">
+      <p>Klik tombol di bawah untuk hubungi kami via WhatsApp.</p>
+      <a href="https://wa.me/6285746978930?text=Halo%20Badjoe%20Borneo%20Cloth" target="_blank">Kirim Pesan</a>
+    </div>
+  </div>
+  <button class="wa-chat-btn" onclick="openWAPopup()">💬 Chat</button>
+</div>
+
+<script>
+  function startSite() {
+    const audio = document.getElementById('bg-music');
+    const popup = document.getElementById('popup-overlay');
+    const mainContent = document.getElementById('main-content');
+
+    audio.play().then(() => {
+      popup.style.display = 'none';
+      mainContent.style.display = 'block';
+    }).catch((e) => {
+      alert("Klik untuk memulai musik");
+    });
+  }
+
+  function openWAPopup() {
+    document.getElementById('whatsappPopup').style.display = 'flex';
+  }
+
+  function closeWAPopup() {
+    document.getElementById('whatsappPopup').style.display = 'none';
+  }
+</script>
+
 </body>
 </html>
